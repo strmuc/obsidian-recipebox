@@ -3,6 +3,7 @@
  * commands, lifecycle hooks, and the settings tab on Obsidian load.
  */
 import { Plugin, TFile, WorkspaceLeaf } from "obsidian";
+import { getObsidianLocale } from "./i18n/obsidian-locale";
 import { findOrOpenLeaf } from "./utils/open-leaf";
 import { RecipeBoxSettings } from "./settings/settings-types";
 import { GroceryManager } from "./grocery/manager";
@@ -25,6 +26,7 @@ import { createFolderClickGalleryController, FolderClickGalleryController } from
 
 export default class RecipeBoxPlugin extends Plugin {
 	settings!: RecipeBoxSettings;
+	locale!: string;
 	manager!: GroceryManager;
 	discoveryCache!: DiscoveryCache;
 	private folderClickGallery!: FolderClickGalleryController;
@@ -32,6 +34,7 @@ export default class RecipeBoxPlugin extends Plugin {
 	private individualRibbonIcons: HTMLElement[] = [];
 
 	async onload(): Promise<void> {
+		this.locale = getObsidianLocale();
 		await this.loadSettings();
 
 		this.manager = new GroceryManager(this.app, {
